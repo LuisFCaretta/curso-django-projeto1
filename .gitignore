@@ -1,5 +1,11 @@
 venv
-
+.coveragerc
+.coverage
+htmlcov
+__pycache__
+.pytest_cache
+launch.json
+settings.json
 # Django # 
  *.log 
  *.pot 
@@ -110,11 +116,7 @@ venv
  GitHub.sublime-settings 
   
  # Visual Studio Code # 
- .vscode/* 
- !.vscode/settings.json 
- !.vscode/tasks.json 
- !.vscode/launch.json 
- !.vscode/extensions.json 
+ 
  .history 
   
  # Personal additions 
