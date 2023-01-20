@@ -6,6 +6,8 @@ __pycache__
 .pytest_cache
 launch.json
 settings.json
+.env
+.env-example
 # Django # 
  *.log 
  *.pot 
