@@ -10,11 +10,11 @@
 {% endif %}
 
 <div class="main-content container">
-    <form action="{{ form_action }}" method="POST" accept-charset="utf-8">
+    <form action="{{ form_action }}" method="POST" accept-charset="utf-8" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="form-content form-content-grid">
             {% for field in form %}
-                <div class="form-group">
+                <div class="form-group {{ field.field.widget.attrs.class }}">
                     <label for="{{ field.id_for_label }}">{{ field.label }}</label>
                     {{ field }}
                     
@@ -24,6 +24,12 @@
                     
                     {{ field.errors }}
                 </div>
+                {% if field.name == 'cover' and field.value.url %}
+                    <div class="span-2">
+                        <img src="{{ field.value.url }}" alt="Capa para {{
+                        recipe.title }}" />
+                    </div>
+                {% endif %}
             {% endfor %}
         </div>
         <div class="form-content form-content-grid">

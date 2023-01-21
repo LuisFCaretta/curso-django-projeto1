@@ -347,7 +347,9 @@ a {
     font-size: 1.4rem;
 }
 
-.form-content input {
+.form-content input,
+.form-content textarea,
+.form-content select {
     width: 100%;
     padding: 1rem;
     border-radius: .4rem;
@@ -369,6 +371,10 @@ a {
 
 .inline-form {
     display: inline;
+}
+
+.span-2 {
+    grid-column: span 2;
 }
 
 .plaintext-button {
@@ -431,8 +437,31 @@ a {
   color: var(--color-debug-dark);
 }
 
+/* Authors */
+.login-message {
+    margin: 1rem 0;
+}
+
+.authors-dashboard-container {
+    max-width: 64rem;
+    text-align: left;
+    padding: var(--spacing-gutter-medium);
+    margin: 0 auto;
+}
+
+.authors-dashboard-container h3,
+.authors-dashboard-container p,
+.authors-dashboard-container ul {
+    list-style-type: none;
+    margin: 1rem 0;
+}
+
 .center {
     text-align: center;
+}
+
+.left {
+    text-align: left;
 }
 
 .m-x {
@@ -447,4 +476,9 @@ a {
     .form-content-grid {
         grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
     }
+    
+    .span-2 {
+        grid-column: span 1;
+}
+
 }
