@@ -464,6 +464,13 @@ a {
     text-align: left;
 }
 
+.fas.fa-trash {
+	color: #db1e47;
+	cursor: pointer;
+	margin: 0 5px;
+	float: right;
+}
+
 .m-x {
     margin: 0 var(--spacing-gutter-medium);
 }
@@ -479,6 +486,6 @@ a {
     
     .span-2 {
         grid-column: span 1;
-}
+    }
 
 }

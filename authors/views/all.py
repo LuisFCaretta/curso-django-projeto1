@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .forms import RegisterForm, LoginForm
-from .forms.recipe_form import AuthorRecipeForm
+from authors.forms import RegisterForm, LoginForm
+from authors.forms.recipe_form import AuthorRecipeForm
 from django.http import Http404
 from django.contrib import messages
 from django.urls import reverse
@@ -11,8 +11,9 @@ from django.core.paginator import Paginator
 from utils.pagination import make_pagination
 import os
 
+
 # Create your views here.
-PER_PAGE = int(os.environ.get('PER_PAGE', 8))
+PER_PAGE = int(os.environ.get('PER_PAGE', 10))
 
 
 def register_view(request):
@@ -118,3 +119,38 @@ def dashboard_recipe_edit(request, id):
     return render(request, 'authors/pages/dashboard_recipe.html', context)
     
     
+@login_required(login_url = 'authors:login', redirect_field_name = 'next')
+def dashboard_new_recipe(request):
+    form = AuthorRecipeForm(
+        request.POST or None,
+        files = request.FILES or None,
+    )
+    context = {
+        'form': form,
+    }
+    if form.is_valid():
+        recipe = form.save(commit = False)
+        recipe.author = request.user
+        recipe.preparation_steps_is_html = False
+        recipe.is_published = False
+        recipe.save()
+        messages.success(request, 'Your recipe has been successfully saved')
+        return redirect(reverse('authors:dashboard'))
+    return render(request, 'authors/pages/dashboard_new_recipe.html', context)
+    
+@login_required(login_url = 'authors:login', redirect_field_name = 'next')
+def dashboard_recipe_delete(request):
+    if not request.POST:
+        raise Http404()
+    POST = request.POST
+    id = POST.get('id')
+    recipe = Recipe.objects.filter(
+        is_published = False,
+        author = request.user,
+        pk = id,
+    ).first()
+    if not recipe:
+        raise Http404()
+    recipe.delete()
+    messages.success(request, 'Deleted successfully')
+    return redirect(reverse('authors:dashboard'))

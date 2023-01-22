@@ -1,11 +1,15 @@
 from django import forms
 from recipes.models import Recipe
 from utils.django_forms import add_attr
+from collections import defaultdict
+from utils.strings import is_positive_number
+from django.core.exceptions import ValidationError
 
 
 class AuthorRecipeForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self._my_errors = defaultdict(list)
         
         add_attr(self.fields.get('preparation_steps'), 'class', 'span-2')
     class Meta:
@@ -13,6 +17,7 @@ class AuthorRecipeForm(forms.ModelForm):
         fields = [
             'title',
             'description',
+            'category',
             'preparation_time',
             'preparation_time_unit',
             'servings',
@@ -41,3 +46,25 @@ class AuthorRecipeForm(forms.ModelForm):
                 ),
             ),
         }
+        
+    def clean(self, *args, **kwargs):
+        super_clean = super().clean(*args, **kwargs)
+        cd = self.cleaned_data
+        title = cd.get('title')
+        description = cd.get('description')
+        if len(title) < 5:
+            self._my_errors['title'].append('Title must have at least 5 characters.')
+        if title == description:
+            self._my_errors['title'].append('Cannot be equal to description.')
+            self._my_errors['description'].append('Cannot be equal to title.')
+
+        if not is_positive_number(self.cleaned_data.get('preparation_time')):
+            self._my_errors['preparation_time'].append('Must be a positive number')
+        if not is_positive_number(self.cleaned_data.get('servings')):
+            self._my_errors['servings'].append('Must be a positive number')
+
+        
+        if self._my_errors:
+            raise ValidationError(self._my_errors)
+        return super_clean
+        

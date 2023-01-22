@@ -2,6 +2,8 @@
     <div class="login-message">
         Logged as {{ request.user.first_name }}.
         <p><a href="{% url 'authors:dashboard' %}">See your recipes</a> or </p>
+        <p><a href="{% url 'authors:dashboard_new_recipe' %}">Create a new
+        recipe</a> or </p>
         <form class="inline-form" action="{% url 'authors:logout' %}" method="POST">
             {% csrf_token %}
             <input type="hidden" name="username" value="{{ request.user.username }}" />
